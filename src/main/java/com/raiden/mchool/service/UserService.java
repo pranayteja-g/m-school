@@ -3,8 +3,13 @@ package com.raiden.mchool.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 import com.raiden.mchool.custom_exceptions.UsernameAlreadyTakenException;
@@ -17,18 +22,36 @@ public class UserService {
 
 	private UserRepository userRepository;
 
+	@Autowired
+	private JwtService jwtService;
+
+	@Autowired
+	AuthenticationManager authManager;
+
 	public UserService(UserRepository userRepository) {
 		this.userRepository = userRepository;
 	}
+
+	private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
 	public ResponseEntity<User> createUser(User user) {
 		Optional<User> existingUser = userRepository.getUserByUsername(user.getUsername());
 		if (existingUser.isPresent()) {
 			throw new UsernameAlreadyTakenException("Username already taken. Choose another.");
 		}
+		user.setPassword(encoder.encode(user.getPassword()));
+		userRepository.save(user);
+		return new ResponseEntity<>(user, HttpStatus.CREATED);
+	}
 
-		// Save the user to the database
-		return new ResponseEntity<>(userRepository.save(user), HttpStatus.CREATED);
+	public String verify(User user) {
+		Authentication authentication = authManager
+				.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+		if (authentication.isAuthenticated()) {
+			return jwtService.generateToken(user.getUsername());
+		} else {
+			return "fail";
+		}
 	}
 
 	public ResponseEntity<List<User>> getAllUsers() {
