@@ -26,7 +26,7 @@ import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JwtService {
-	
+
 	@Autowired
 	private UserRepository userRepository;
 
@@ -45,20 +45,22 @@ public class JwtService {
 
 	public String generateToken(String username) {
 		// Fetch the user's details from the database
-	    User user = userRepository.getUserByUsername(username)
-	            .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+		User user = userRepository.getUserByUsername(username)
+				.orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
-	    Role role = user.getRole(); // Retrieve the role associated with the user
+		Role role = user.getRole(); // Retrieve the role associated with the user
+		Long userId = user.getId(); // Retrieve the user's ID
 
-	    // Prepare claims, adding the role
-	    Map<String, Object> claims = new HashMap<>();
-	    claims.put("role", "ROLE_" + role.toString());  // Now you can use getName()
+		// Prepare claims, adding the role
+		Map<String, Object> claims = new HashMap<>();
+		claims.put("role", "ROLE_" + role.toString());
+		claims.put("id", userId);
 		return Jwts.builder()
 				.claims()
 				.add(claims)
 				.subject(username)
 				.issuedAt(new Date(System.currentTimeMillis()))
-				.expiration(new Date(System.currentTimeMillis() + 60 * 60 * 300))
+				.expiration(new Date(System.currentTimeMillis() + 60 * 60 * 1000))
 				.and()
 				.signWith(getKey())
 				.compact();
