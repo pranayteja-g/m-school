@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +20,7 @@ import com.raiden.mchool.model.User;
 import com.raiden.mchool.service.UserService;
 
 @RestController
-@RequestMapping("/v1/api/user")
+@RequestMapping("/admin/user")
 public class UserController {
 
 	private UserService userService;
@@ -38,6 +39,7 @@ public class UserController {
 		return new ResponseEntity<>(userService.verify(user), HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/all")
 	public ResponseEntity<List<User>> getAllUsers() {
 		return userService.getAllUsers();
@@ -58,12 +60,14 @@ public class UserController {
 		return userService.getUsersByRole(role);
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping("/update/{id}")
 	public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
 		return userService.updateUser(id, updatedUser).map(ResponseEntity::ok)
 				.orElse(ResponseEntity.notFound().build());
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
 		boolean isDeleted = userService.deleteUser(id);

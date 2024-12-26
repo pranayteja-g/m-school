@@ -1,9 +1,10 @@
-package com.raiden.mchool.controller;
+package com.raiden.mchool.controller.employeecontrollers;
 
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/v1/api/employee")
+@RequestMapping("/admin/e")
 public class EmployeeController {
 
 	private EmployeeService employeeService;
@@ -33,16 +34,17 @@ public class EmployeeController {
 		return new ResponseEntity<>(employeeService.createEmployee(employee), HttpStatus.CREATED);
 	}
 
-	@GetMapping("/id/{id}")
-	public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
-		Employee employee = employeeService.getEmployeeById(id);
-		if (employee == null) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		} else {
-			return new ResponseEntity<>(employee, HttpStatus.OK);
-		}
-	}
+//	@GetMapping("/id/{id}")
+//	public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
+//		Employee employee = employeeService.getEmployeeById(id);
+//		if (employee == null) {
+//			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//		} else {
+//			return new ResponseEntity<>(employee, HttpStatus.OK);
+//		}
+//	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/name/{name}")
 	public ResponseEntity<List<Employee>> getEmployeeByName(@PathVariable String name) {
 		List<Employee> employees = employeeService.getEmployeeByName(name);
@@ -53,6 +55,7 @@ public class EmployeeController {
 		}
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/username/{username}")
 	public ResponseEntity<Employee> getEmployeeByUsername(@PathVariable String username) {
 		Employee employee = employeeService.getEmployeeByUsername(username);
@@ -63,12 +66,14 @@ public class EmployeeController {
 		}
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping("/update/{id}")
 	public ResponseEntity<Employee> updateEmployee(@PathVariable Long id, @RequestBody Employee updatedEmployee) {
 		return employeeService.updateEmployee(id, updatedEmployee).map(ResponseEntity::ok)
 				.orElse(ResponseEntity.notFound().build());
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
 		employeeService.deleteEmployee(id);

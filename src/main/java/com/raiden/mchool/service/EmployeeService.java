@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.raiden.mchool.custom_exceptions.UsernameAlreadyTakenException;
 import com.raiden.mchool.model.Employee;
+import com.raiden.mchool.model.User;
 import com.raiden.mchool.repository.EmployeeRepository;
 import com.raiden.mchool.repository.UserRepository;
 
@@ -16,10 +17,13 @@ public class EmployeeService {
 
 	private EmployeeRepository employeeRepository;
 	private UserRepository userRepository;
+	private UserService userService;
 
-	public EmployeeService(EmployeeRepository employeeRepository, UserRepository userRepository) {
+	public EmployeeService(EmployeeRepository employeeRepository, UserRepository userRepository,
+			UserService userService) {
 		this.userRepository = userRepository;
 		this.employeeRepository = employeeRepository;
+		this.userService = userService;
 	}
 
 	public Employee createEmployee(Employee employee) {
@@ -29,6 +33,9 @@ public class EmployeeService {
 		if (userRepository.existsByUsername(employee.getUser().getUsername())) {
 			throw new UsernameAlreadyTakenException("username already taken. try again");
 		}
+		
+		User user = employee.getUser();
+		userService.createUser(user);
 		return employeeRepository.save(employee);
 	}
 

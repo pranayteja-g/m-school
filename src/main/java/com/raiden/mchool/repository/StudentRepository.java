@@ -15,6 +15,8 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
 	List<Student> findByName(String name);
 
+	boolean existsByRollNo(String rollNo);
+
 	@Query("SELECT s FROM Student s WHERE s.user.username = :username")
 	Optional<Student> findStudentByUsername(@Param("username") String username);
 

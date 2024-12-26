@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.raiden.mchool.custom_exceptions.UsernameAlreadyTakenException;
 import com.raiden.mchool.model.Student;
+import com.raiden.mchool.model.User;
 import com.raiden.mchool.repository.StudentRepository;
 import com.raiden.mchool.repository.UserRepository;
 
@@ -19,16 +20,26 @@ public class StudentService {
 
 	private StudentRepository studentRepository;
 	private UserRepository userRepository;
+	private UserService userService;
 
-	public StudentService(StudentRepository studentRepository, UserRepository userRepository) {
+	public StudentService(StudentRepository studentRepository, UserRepository userRepository, UserService userService) {
 		this.studentRepository = studentRepository;
 		this.userRepository = userRepository;
+		this.userService = userService;
 	}
 
 	public ResponseEntity<Student> createStudent(Student student) {
 		if (userRepository.existsByUsername(student.getUser().getUsername())) {
 			throw new UsernameAlreadyTakenException("username already taken. try again");
 		}
+
+		if (studentRepository.existsByRollNo(student.getRollNo())) {
+			throw new IllegalArgumentException("Roll number already exists. Please choose a unique roll number.");
+		}
+
+		// create and save the user through UserService
+		User user = student.getUser();
+		userService.createUser(user);
 		return new ResponseEntity<>(studentRepository.save(student), HttpStatus.CREATED);
 	}
 

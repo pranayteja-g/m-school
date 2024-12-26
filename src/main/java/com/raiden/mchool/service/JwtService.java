@@ -13,6 +13,8 @@ import javax.crypto.SecretKey;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import com.raiden.mchool.model.Role;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -34,10 +36,18 @@ public class JwtService {
 		}
 	}
 
-	public String generateToken(String username) {
+	public String generateToken(String username, Role role) {
 		Map<String, Object> claims = new HashMap<>();
-		return Jwts.builder().claims().add(claims).subject(username).issuedAt(new Date(System.currentTimeMillis()))
-				.expiration(new Date(System.currentTimeMillis() + 60 * 60 * 30)).and().signWith(getKey()).compact();
+		claims.put("role", "ROLE_" + role.name());  // Add the ROLE_ prefix here
+		return Jwts.builder()
+				.claims()
+				.add(claims)
+				.subject(username)
+				.issuedAt(new Date(System.currentTimeMillis()))
+				.expiration(new Date(System.currentTimeMillis() + 60 * 60 * 300))
+				.and()
+				.signWith(getKey())
+				.compact();
 	}
 
 	public SecretKey getKey() {
