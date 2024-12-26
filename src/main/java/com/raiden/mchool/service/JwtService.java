@@ -10,10 +10,14 @@ import java.util.function.Function;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.raiden.mchool.model.Role;
+import com.raiden.mchool.model.User;
+import com.raiden.mchool.repository.UserRepository;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -22,6 +26,9 @@ import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JwtService {
+	
+	@Autowired
+	private UserRepository userRepository;
 
 	private String secretKey = "";
 
@@ -36,9 +43,16 @@ public class JwtService {
 		}
 	}
 
-	public String generateToken(String username, Role role) {
-		Map<String, Object> claims = new HashMap<>();
-		claims.put("role", "ROLE_" + role.name());  // Add the ROLE_ prefix here
+	public String generateToken(String username) {
+		// Fetch the user's details from the database
+	    User user = userRepository.getUserByUsername(username)
+	            .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+
+	    Role role = user.getRole(); // Retrieve the role associated with the user
+
+	    // Prepare claims, adding the role
+	    Map<String, Object> claims = new HashMap<>();
+	    claims.put("role", "ROLE_" + role.toString());  // Now you can use getName()
 		return Jwts.builder()
 				.claims()
 				.add(claims)
