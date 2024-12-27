@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +21,8 @@ import com.raiden.mchool.model.Student;
 import com.raiden.mchool.service.EmployeeService;
 import com.raiden.mchool.service.SalaryService;
 import com.raiden.mchool.service.StudentService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/employee")
@@ -32,7 +36,7 @@ public class EmployeeAccessController {
 	
 	@Autowired
 	private StudentService studentService;
-
+	
 	@GetMapping("/id/{id}") //example: api/employee/id/1
 	public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
 		Employee employee = employeeService.getEmployeeById(id);

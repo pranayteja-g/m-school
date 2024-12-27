@@ -33,7 +33,7 @@ public class EmployeeService {
 		if (userRepository.existsByUsername(employee.getUser().getUsername())) {
 			throw new UsernameAlreadyTakenException("username already taken. try again");
 		}
-		
+
 		User user = employee.getUser();
 		userService.createUser(user);
 		return employeeRepository.save(employee);
@@ -41,6 +41,10 @@ public class EmployeeService {
 
 	public Employee getEmployeeById(Long id) {
 		return employeeRepository.findById(id).orElse(null);
+	}
+
+	public List<Employee> getAllEmployees() {
+		return employeeRepository.findAll();
 	}
 
 	public List<Employee> getEmployeeByName(String name) {

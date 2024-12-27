@@ -42,6 +42,10 @@ public class StudentService {
 		userService.createUser(user);
 		return new ResponseEntity<>(studentRepository.save(student), HttpStatus.CREATED);
 	}
+	
+	public List<Student> getAllStudents(){
+		return studentRepository.findAll();
+	}
 
 	public ResponseEntity<Student> getStudentById(Long id) {
 		Optional<Student> student = studentRepository.findById(id);

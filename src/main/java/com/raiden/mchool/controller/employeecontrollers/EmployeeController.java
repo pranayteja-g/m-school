@@ -29,7 +29,7 @@ public class EmployeeController {
 		this.employeeService = employeeService;
 	}
 
-	@PostMapping("/create")
+	@PostMapping("/create")  
 	public ResponseEntity<Employee> createEmployee(@Valid @RequestBody Employee employee) {
 		return new ResponseEntity<>(employeeService.createEmployee(employee), HttpStatus.CREATED);
 	}
@@ -43,6 +43,12 @@ public class EmployeeController {
 //			return new ResponseEntity<>(employee, HttpStatus.OK);
 //		}
 //	}
+
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/all")
+	public ResponseEntity<List<Employee>> getAllEmployees() {
+		return new ResponseEntity<>(employeeService.getAllEmployees(), HttpStatus.OK);
+	}
 
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/name/{name}")

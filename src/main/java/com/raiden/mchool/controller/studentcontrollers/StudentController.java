@@ -1,8 +1,12 @@
 package com.raiden.mchool.controller.studentcontrollers;
 
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -30,6 +34,11 @@ public class StudentController {
 	public ResponseEntity<Student> createStudent(@Valid @RequestBody Student student) {
 		return studentService.createStudent(student);
 	}
+	
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/all")
+	public ResponseEntity<List<Student>> getAllStudents(){
+		return new ResponseEntity<>(studentService.getAllStudents(), HttpStatus.OK);	}
 
 //	@GetMapping("/id/{id}")
 //	public ResponseEntity<Student> getStudentById(@PathVariable Long id) {

@@ -3,6 +3,9 @@ package com.raiden.mchool.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.raiden.mchool.model.ExamResult;
@@ -23,12 +26,13 @@ public class ExamResultService {
         return examResultRepository.save(examResult);
     }
 
-    public List<ExamResult> getAllExamResults() {
-        return examResultRepository.findAll();
+    public Page<ExamResult> getAllExamResults(int page, int size) {
+    	Pageable pageable = PageRequest.of(page, size);
+    	return examResultRepository.findAll(pageable);
     }
 
-    public List<ExamResult> getStudentExamResults(Long studentId) {
-        return examResultRepository.findByStudentId(studentId);
+    public Page<ExamResult> getStudentExamResults(Long studentId, Pageable pageable) {
+        return examResultRepository.findByStudentId(studentId, pageable);
     }
 
     public Optional<ExamResult> updateExamResult(Long id, ExamResult updatedResult) {
