@@ -64,7 +64,7 @@ public class ExamResultService {
 		dto.setId(examResult.getId());
 		dto.setExamType(examResult.getExamType());
 		dto.setTotalMarks(examResult.getTotalMarks());
-		dto.setMarkObtained(examResult.getMarksObtained());
+		dto.setMarksObtained(examResult.getMarksObtained());
 
 		// Map the student details to StudentDto
 		StudentDto studentDto = new StudentDto();

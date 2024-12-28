@@ -8,6 +8,6 @@ public class ExamResultDto {
 	private Long id;
 	private String examType;
 	private Double totalMarks;
-	private Double markObtained;
+	private Double marksObtained;
 	private StudentDto studentDto;
 }
