@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.raiden.mchool.dto.ExamResultDto;
+import com.raiden.mchool.dto.StudentDto;
 import com.raiden.mchool.model.ExamResult;
 import com.raiden.mchool.model.Fee;
 import com.raiden.mchool.model.Student;
@@ -33,13 +35,13 @@ public class StudentAccessController {
 	private FeeService feeService;
 
 	@GetMapping("/id/{id}") // example: /student/id/1
-	public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
+	public ResponseEntity<StudentDto> getStudentById(@PathVariable Long id) {
 		return studentService.getStudentById(id);
 	}
 
 	@GetMapping("/name/{name}")
-	public ResponseEntity<List<Student>> getStudentByName(@PathVariable String name) {
-		List<Student> students = studentService.getStudentsByName(name);
+	public ResponseEntity<List<StudentDto>> getStudentByName(@PathVariable String name) {
+		List<StudentDto> students = studentService.getStudentsByName(name);
 		if (students.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		} else {
@@ -48,14 +50,11 @@ public class StudentAccessController {
 	}
 
 	@GetMapping("/student-id/{studentId}/exam-results")
-	public ResponseEntity<Page<ExamResult>> getStudentExamResults(
-	        @PathVariable Long studentId,
-	        @RequestParam(defaultValue = "0") int page,
-	        @RequestParam(defaultValue = "10") int size) {
-	    Page<ExamResult> results = examResultService.getStudentExamResults(studentId, PageRequest.of(page, size));
-	    return results.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(results);
+	public ResponseEntity<Page<ExamResultDto>> getStudentExamResults(@PathVariable Long studentId,
+			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+		Page<ExamResultDto> results = examResultService.getStudentExamResults(studentId, PageRequest.of(page, size));
+		return results.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(results);
 	}
-
 
 	@GetMapping("/fees/{studentId}") // /student/fees/1
 	public ResponseEntity<List<Fee>> getStudentFees(@PathVariable Long studentId) {

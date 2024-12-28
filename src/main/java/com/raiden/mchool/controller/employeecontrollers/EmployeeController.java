@@ -29,7 +29,7 @@ public class EmployeeController {
 		this.employeeService = employeeService;
 	}
 
-	@PostMapping("/create")  
+	@PostMapping("/create")
 	public ResponseEntity<Employee> createEmployee(@Valid @RequestBody Employee employee) {
 		return new ResponseEntity<>(employeeService.createEmployee(employee), HttpStatus.CREATED);
 	}

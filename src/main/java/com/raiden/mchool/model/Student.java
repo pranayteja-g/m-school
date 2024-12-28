@@ -2,6 +2,7 @@ package com.raiden.mchool.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -50,10 +51,10 @@ public class Student {
 	private String rollNo;
 
 	@OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-	@JsonManagedReference
+	@JsonManagedReference(value = "student-exam-result")
 	private List<ExamResult> examResults;
 
 	@OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-	@JsonManagedReference
+	@JsonManagedReference(value = "student-fee")
 	private List<Fee> fees;
 }

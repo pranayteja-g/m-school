@@ -1,9 +1,12 @@
 package com.raiden.mchool.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.raiden.mchool.dto.SalaryDto;
 import com.raiden.mchool.model.Salary;
 import com.raiden.mchool.service.SalaryService;
 
@@ -30,6 +34,12 @@ public class SalaryController {
 	public ResponseEntity<Salary> createSalary(@Valid @RequestBody Salary salary) {
 		return new ResponseEntity<>(salaryService.createSalary(salary), HttpStatus.CREATED);
 	}
+	
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/sal/all")
+	public ResponseEntity<List<SalaryDto>> getAllSalaries(){
+		return new ResponseEntity<>(salaryService.getAllSalaries(), HttpStatus.OK);
+	}
 
 //	@GetMapping("/sal/employee/{employeeId}")
 //	public ResponseEntity<List<Salary>> getEmployeeSalaries(@PathVariable Long employeeId) {
@@ -47,7 +57,7 @@ public class SalaryController {
 
 	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping("/sal/update/{id}")
-	public ResponseEntity<Salary> updateSalary(@PathVariable Long id, @RequestBody Salary salary) {
+	public ResponseEntity<SalaryDto> updateSalary(@PathVariable Long id, @RequestBody Salary salary) {
 		return salaryService.updateSalary(id, salary).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
 	}
 

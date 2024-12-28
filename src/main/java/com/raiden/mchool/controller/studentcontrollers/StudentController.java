@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.raiden.mchool.dto.StudentDto;
 import com.raiden.mchool.model.Student;
 import com.raiden.mchool.service.StudentService;
 
@@ -31,14 +32,15 @@ public class StudentController {
 
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("/create")
-	public ResponseEntity<Student> createStudent(@Valid @RequestBody Student student) {
+	public ResponseEntity<StudentDto> createStudent(@Valid @RequestBody Student student) {
 		return studentService.createStudent(student);
 	}
-	
+
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/all")
-	public ResponseEntity<List<Student>> getAllStudents(){
-		return new ResponseEntity<>(studentService.getAllStudents(), HttpStatus.OK);	}
+	public ResponseEntity<List<StudentDto>> getAllStudents() {
+		return new ResponseEntity<>(studentService.getAllStudents(), HttpStatus.OK);
+	}
 
 //	@GetMapping("/id/{id}")
 //	public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
@@ -56,10 +58,12 @@ public class StudentController {
 //	}
 	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping("/update/{id}")
-	public ResponseEntity<Student> updateStudent(@PathVariable Long id, @RequestBody Student updatedStudent) {
-		return studentService.updateStudent(id, updatedStudent).map(ResponseEntity::ok)
-				.orElse(ResponseEntity.notFound().build());
-	}
+	public ResponseEntity<StudentDto> updateStudent(@PathVariable Long id, @RequestBody Student updatedStudent) {
+        return studentService.updateStudent(id, updatedStudent)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {

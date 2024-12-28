@@ -1,6 +1,7 @@
 package com.raiden.mchool.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,6 +38,6 @@ public class ExamResult {
 
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "student-exam-result")
     private Student student;
 }
