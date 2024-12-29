@@ -1,6 +1,5 @@
 package com.raiden.mchool.model;
 
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -12,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,24 +24,24 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class Fee {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Column(nullable = false)
-    private Double totalAmount;
+	@Column(nullable = false)
+	private Double totalAmount;
 
-    @Column(nullable = false)
-    private Double paidAmount;
+	@Column(nullable = false)
+	private Double paidAmount;
 
-    @Column(nullable = false)
-    private Double dueAmount;
+	@Column(nullable = false)
+	private Double dueAmount;
 
-    @Column(nullable = false)
-    private String feeType;
+	@Column(nullable = false)
+	private String feeType;
 
-    @ManyToOne
-    @JoinColumn(name = "student_id", nullable = false)
-    @JsonBackReference(value = "student-fee")
-    private Student student;
+	@ManyToOne
+	@JoinColumn(name = "student_id", nullable = false)
+	@JsonBackReference(value = "student-fee")
+	private Student student;
 }

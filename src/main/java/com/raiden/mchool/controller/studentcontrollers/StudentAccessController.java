@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.raiden.mchool.dto.ExamResultDto;
+import com.raiden.mchool.dto.FeeDto;
 import com.raiden.mchool.dto.StudentDto;
 import com.raiden.mchool.model.ExamResult;
 import com.raiden.mchool.model.Fee;
@@ -57,8 +58,8 @@ public class StudentAccessController {
 	}
 
 	@GetMapping("/fees/{studentId}") // /student/fees/1
-	public ResponseEntity<List<Fee>> getStudentFees(@PathVariable Long studentId) {
-		List<Fee> fees = feeService.getStudentFees(studentId);
+	public ResponseEntity<List<FeeDto>> getStudentFees(@PathVariable Long studentId) {
+		List<FeeDto> fees = feeService.getStudentFees(studentId);
 		return fees.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(fees);
 	}
 

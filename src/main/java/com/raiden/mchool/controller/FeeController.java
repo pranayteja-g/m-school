@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.raiden.mchool.dto.FeeDto;
 import com.raiden.mchool.model.Fee;
 import com.raiden.mchool.service.FeeService;
 
@@ -30,12 +31,12 @@ public class FeeController {
 
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("/f/create")
-	public ResponseEntity<Fee> createFee(@Valid @RequestBody Fee fee) {
+	public ResponseEntity<FeeDto> createFee(@Valid @RequestBody Fee fee) {
 		return new ResponseEntity<>(feeService.createFee(fee), HttpStatus.CREATED);
 	}
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/f/all")
-	public ResponseEntity<List<Fee>> getAllFees() {
+	public ResponseEntity<List<FeeDto>> getAllFees() {
 		return new ResponseEntity<>(feeService.getAllFees(), HttpStatus.OK);
 	}
 
@@ -47,7 +48,7 @@ public class FeeController {
 
 	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping("/f/update/{id}")
-	public ResponseEntity<Fee> updateFee(@PathVariable Long id, @RequestBody Fee fee) {
+	public ResponseEntity<FeeDto> updateFee(@PathVariable Long id, @RequestBody Fee fee) {
 		return feeService.updateFee(id, fee).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
 	}
 
