@@ -1,5 +1,6 @@
 package com.raiden.mchool.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -24,23 +25,21 @@ public class SalaryService {
 	}
 
 	public Salary createSalary(Salary salary) {
-		salary.setCreatedDate(LocalDateTime.now());
+		salary.setCreatedDate(LocalDate.now());
 		return salaryRepository.save(salary);
 	}
 
 	public List<SalaryDto> getAllSalaries() {
-        List<Salary> salaries = salaryRepository.findAll();
-        return salaries.stream()
-                .map(this::convertToSalaryDTO)
-                .collect(Collectors.toList());
-    }
+		List<Salary> salaries = salaryRepository.findAll();
+		return salaries.stream().map(this::convertToSalaryDTO).collect(Collectors.toList());
+	}
 
 	public List<SalaryDto> getEmployeeSalaries(Long employeeId) {
 		List<Salary> salaries = salaryRepository.findByEmployeeId(employeeId);
 		return salaries.stream().map(this::convertToSalaryDTO).collect(Collectors.toList());
 	}
 
-	public List<SalaryDto> getSalariesBetweenDates(LocalDateTime startDate, LocalDateTime endDate) {
+	public List<SalaryDto> getSalariesBetweenDates(LocalDate startDate, LocalDate endDate) {
 		List<Salary> salaries = salaryRepository.findByCreatedDateBetween(startDate, endDate);
 		return salaries.stream().map(this::convertToSalaryDTO).collect(Collectors.toList());
 	}

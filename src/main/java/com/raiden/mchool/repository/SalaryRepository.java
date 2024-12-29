@@ -1,5 +1,6 @@
 package com.raiden.mchool.repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -12,5 +13,5 @@ import com.raiden.mchool.model.Salary;
 public interface SalaryRepository extends JpaRepository<Salary, Long> {
     List<Salary> findByEmployeeId(Long employeeId);
 
-    List<Salary> findByCreatedDateBetween(LocalDateTime startDate, LocalDateTime endDate);
+    List<Salary> findByCreatedDateBetween(LocalDate startDate, LocalDate endDate);
 }

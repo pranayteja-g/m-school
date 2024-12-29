@@ -1,5 +1,6 @@
 package com.raiden.mchool.controller.employeecontrollers;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -57,8 +58,8 @@ public class EmployeeAccessController {
 	
 	@GetMapping("/salary/between") // api/employee/salary/between
 	public ResponseEntity<List<SalaryDto>> getSalariesBetweenDates(
-			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime startDate,
-			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime endDate) {
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
 		List<SalaryDto> salaries = salaryService.getSalariesBetweenDates(startDate, endDate);
 		return salaries.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(salaries);
 	}
