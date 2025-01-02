@@ -35,6 +35,9 @@ public class ExamResult {
 
     @Column(nullable = false)
     private Double marksObtained;
+    
+    @Column(nullable = false)
+    private String subject;
 
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)

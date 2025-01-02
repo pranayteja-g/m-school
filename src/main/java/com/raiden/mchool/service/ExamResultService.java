@@ -49,6 +49,7 @@ public class ExamResultService {
 			result.setExamType(updatedResult.getExamType());
 			result.setTotalMarks(updatedResult.getTotalMarks());
 			result.setMarksObtained(updatedResult.getMarksObtained());
+			result.setSubject(updatedResult.getSubject());
 			ExamResult savedResult = examResultRepository.save(result);
 			return mapToDto(savedResult);
 		});
@@ -65,6 +66,7 @@ public class ExamResultService {
 		dto.setExamType(examResult.getExamType());
 		dto.setTotalMarks(examResult.getTotalMarks());
 		dto.setMarksObtained(examResult.getMarksObtained());
+		dto.setSubject(examResult.getSubject());
 
 		// Map the student details to StudentDto
 		StudentDto studentDto = new StudentDto();

@@ -9,5 +9,6 @@ public class ExamResultDto {
 	private String examType;
 	private Double totalMarks;
 	private Double marksObtained;
+	private String subject;
 	private StudentDto studentDto;
 }
